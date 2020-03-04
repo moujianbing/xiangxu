@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet"
+    href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script  src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script  src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" th:href="@{/resources/css/loginButton.css}"  />
+		<link rel="stylesheet" th:href="@{/resources/css/nav.css}"  />
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<img alt="140x140" th:src="@{/resources/img/mainIcon01.png}"  />
+					<div class="row clearfix">
+						<div class="col-md-4 column">
+						</div>
+						<div class="col-md-4 column" >
+							<div style="text-align: center;">
+								<h3 style="color: #FF5656;">[[#{login.tip}]]</h3>
+							</div>
+							<div style="padding-left: 50px;padding-right: 50px;padding-bottom: 70px;padding-top: 40px;background-color: #e1f0eb;">
+								<form role="form" method="post" th:action="@{/login}">
+									<div class="form-group">
+										<label  style="color: #FF5656;" th:text="#{login.studentId}">学号</label><input class="form-control" name="studentId" id="exampleInputEmail1"  />
+									</div>
+									<div class="form-group">
+										<label for="exampleInputPassword1" style="color: #FF5656;" th:text="#{login.studentPassword}">密码</label><input class="form-control" name="studentPassword" id="exampleInputPassword1" type="password" />
+									</div>
+									<div class="form-group">
+									
+									<div class="checkbox">
+										<label><input type="checkbox" />[[#{login.remember}]]</label>
+									</div> 
+									<button type="submit" id="loginButton" class="btn  btn-lg btn-block" style="color: white;background-color: #FF5656;">[[#{login.btn}]]</button>
+									<p style="color:red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+									<a class="btn btn-sm" th:href="@{/index.html(language='zh_CN')}">中文<a/>
+									<a class="btn btn-sm" th:href="@{/index.html(language='en_US')}">English<a/>
+								</form>
+							</div>
+						</div>
+						<div class="col-md-4 column">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>

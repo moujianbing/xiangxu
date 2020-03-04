@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"
+          href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script th:src="@{/webjars/jquery/2.1.1/jquery.js}"
+            src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/resources/css/loginButton.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/layui/css/layui.css}">
+</head>
+
+<body>
+<script th:src="@{/resources/layui/layui.js}"></script>
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-2 column">
+            <img alt="140x140" th:src="@{/resources/img/mainIcon01.png}" />
+        </div>
+        <div class="col-md-8 column" style="margin-top: 30px;">
+            <div class="list-group">
+                <a href="#" class="list-group-item " th:text="${className}"></a>
+            </div>
+        </div>
+        <div class="col-md-1 column" style="margin-top: 30px;">
+            <button type="button" class="btn btn-default" style="background-color: #FF5656;color: white;">退出</button>
+        </div>
+        <div class="col-md-1 column">
+            <img alt="140x140" th:src="@{/resources/img/class_01.png}"
+                 style="height: 50px;width: 50px;margin-left: 20px;border-radius: 25px;margin-top: 25px;"/>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-3 column">
+            <div class="panel-group" id="panel-283808">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a class="panel-title collapsed btn btn-block" id="notice" data-toggle="collapse"
+                           data-parent="#panel-283808" href="#">班级公告</a>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a class="panel-title btn btn-block" data-toggle="collapse" data-parent="#panel-283808"
+                           href="#panel-element-578803">班级风采</a>
+                    </div>
+                    <div id="panel-element-578803" class="panel-collapse in">
+                        <div class="panel-body">
+                            <a href="#" id="album" style="text-decoration: none;">班级相册</a>
+                        </div>
+                        <div class="panel-body">
+                            <a href="#" id="activity" style="text-decoration: none;">班级活动</a>
+                        </div>
+                        <div class="panel-body">
+                            <a href="javascript:void(0)" id="member" style="text-decoration: none;">班级成员</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a class="panel-title collapsed btn btn-block" data-toggle="collapse"
+                           data-parent="#panel-283808" href="#panel-element-337896">班级管理</a>
+                    </div>
+                    <div id="panel-element-337896" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <a href="#" id="fee" style="text-decoration: none;">班费收支明细</a>
+                        </div>
+                        <div class="panel-body">
+                            <a href="#" id="homework" style="text-decoration: none;">作业提交</a>
+                        </div>
+                        <div class="panel-body">
+                            <a href="#" id="document" style="text-decoration: none;">重要文档管理</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-9 column">
+            <ul class="breadcrumb">
+                <li>
+                    <span id="parentItem">班级公告</span>
+                </li>
+                <li>
+                    <span id="childItem"></span>
+                </li>
+            </ul>
+
+            <div class="row clearfix">
+                <div class="col-md-12 column" id="class_right_page">
+                    <div th:if="${result=='notice'}">
+                        <div class="row clearfix">
+                            <div class="col-md-12 column">
+                                <div class="well" th:each="e:${classNotice}">
+                                    <div style="float:right">
+                                        <button  class="btn btn-default" th:id="${e.classNoticeId}"  onclick="deleteNotice(this)" >删除</button>
+                                        <script>
+                                            function deleteNotice(element){
+                                                var classNoticeId=element.id;
+                                                location.replace("/noticeDelete?classNoticeId="+classNoticeId);
+                                            }
+                                        </script>
+                                    </div>
+                                    <h3  th:text="${e.classNoticeTittle}"></h3>
+                                    <h4 th:text="${e.classNoticeContent}"></h4>
+                                    <p th:text="${e.classNoticePublisher}"></p>
+                                    <p th:text="${#dates.format(e.classNoticeTime,'yyyy-MM-dd hh:mm')}"></p>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion"
+                                               href="#collapseOne">
+                                                发布公告
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <form class="form-horizontal" role="form" th:action="@{/noticeAdd}">
+                                                <div class="form-group">
+                                                    <label for="noticeTittle" class="col-sm-2 control-label">标题</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" name="classNoticeTittle" id="noticeTittle" placeholder="请输入标题">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="noticeContent" class="col-sm-2 control-label">内容</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" name="classNoticeContent" id="noticeContent" placeholder="请输入内容">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-sm-offset-2 col-sm-10">
+                                                        <button type="button" class="btn btn-default" title="提示" th:id="publish"
+                                                                data-container="body" data-toggle="popover" data-placement="right"
+                                                                data-content="您尚未输入标题或内容">发布</button>
+                                                    </div>
+                                                    <script>
+                                                        $(function al() {
+                                                            $("#publish").on("click",function(){
+                                                                 var noticeTittle = document.getElementById("noticeTittle").value;
+                                                                 var noticeContent = document.getElementById("noticeContent").value;
+                                                                if(noticeTittle==''||noticeContent==''){
+
+                                                                    $("[data-toggle='popover']").popover();
+                                                                }else{
+                                                                    location.replace("/noticeAdd?classNoticeTittle="+noticeTittle+"&&classNoticeContent="+noticeContent);
+                                                                }
+                                                            });
+
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div style="display:none;" th:id="error" th:name="${msg}" th:text="${msg}"></div>
+                                        <script>
+                                            if($("#error").html()=='ok'){
+                                                alert("发布成功！");
+                                            }
+                                            if($("#error").html()=='error'){
+                                                alert("发布失败，请重新输入！");
+                                            }
+
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${result=='album'}">
+                        <div class="row clearfix">
+                            <div class="col-md-12 column" style="width: 840px;">
+                                <div class="row">
+                                    <div class="col-md-4" th:each="e:${classAlbum}">
+                                        <div class="thumbnail">
+                                            <img alt="300x200" style="width:240px;height:140px" th:src="${e.classAlbumImage}" />
+                                            <div class="caption" th:id="${e.classAlbumId}">
+                                                <h3 th:name="h_album_name" th:text="${e.classAlbumName}">
+
+                                                </h3>
+                                                <p th:name="p_album_desc" th:text="${e.classAlbumDesc}">
+
+                                                </p>
+
+                                                <p th:text="${e.classAlbumPublisher}">
+
+                                                </p>
+                                                <p th:text="${#dates.format(e.classAlbumTime,'yyyy-MM-dd hh:mm')}"></p>
+                                                <p>
+                                                    <a class="btn btn-default"  target="_blank"  th:href="@{'/enterClassPhoto?classAlbumId='+${e.classAlbumId}}">查看</a>
+                                                    <a class="btn btn-default" onclick="deleteAlbum(this)"  href="#">删除</a>
+                                                    <script>
+                                                        function deleteAlbum(obj){
+                                                                var id=$(obj).parent().parent().attr("id");
+                                                                console.log(id);
+                                                                var state=confirm("确定删除?");
+                                                                if (state==true){
+                                                                location.replace("/albumDelete?classAlbumId="+id);
+                                                                return true;
+                                                                }else{
+
+                                                                return false;
+                                                                }
+                                                            }
+
+                                                    </script>
+                                                    <a class="btn btn-default" target="_blank"  th:href="@{'/enterAlbumModify?classAlbumId='+${e.classAlbumId}}">修改</a>
+
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div style="display:none;" th:id="albumError" th:name="${albumMsg}" th:text="${albumMsg}"></div>
+                                        <script>
+
+                                                <!--var albumError=document.getElementById("albumError");
+                                                if(albumError!=null){alert(albumError.name);}-->
+
+                                        </script>
+                                    </div>
+                                    <script>
+                                        $(function() {
+                                            /*如果相册描述的字符串长度大于十五就需要隐藏多余的部分*/
+                                            var p_album_desc= document.getElementsByName("p_album_desc");
+
+                                            console.log(p_album_desc);
+                                            for (var i = 0; i < p_album_desc.length; i++) {
+                                                if(p_album_desc[i].innerText.length>15){
+                                                    p_album_desc[i].innerText=p_album_desc[i].innerText.substring(0,13)+"……"
+                                                }
+                                            }
+                                           
+                                         });
+                                    </script>
+                                </div>
+                                <div class="row">
+                                    <a id="modal-483742" href="#modal-container-483742" role="button" class="btn" data-toggle="modal">新建相册</a>
+
+                                    <div class="modal fade" id="modal-container-483742" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                    <h4 class="modal-title" id="myModalLabel">
+                                                        新建相册
+                                                    </h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form  method="POST" th:id="albumForm"  enctype="multipart/form-data">
+                                                        <label for="photoAlbumName" class="col-sm-2 control-label">相册名称</label>
+                                                        <input type="text" class="form-control" name="classAlbumName" id="photoAlbumName" placeholder="请输入相册名称">
+                                                        <span style="font-family: '微软雅黑';color:red"  id="NameWordCheck">不能超过5个字</span><br>
+                                                        <label for="photoAlbumDesc">相册描述</label>
+                                                        <textarea class="form-control" rows="3" name="classAlbumDesc" id="photoAlbumDesc" οnkeyup="checkWords()"  οnmοusedοwn="checkWords()"></textarea>
+                                                        <span id="allWords" style="color:green">还可以输入<span style="font-family: '微软雅黑';" id="DescWordCheck">40</span>个汉字</span>
+                                                        <br>
+                                                        <script>
+                                                            $(function() {
+                                                                $("#photoAlbumDesc").keyup(function(){
+                                                                    var content=$("#photoAlbumDesc").val();
+                                                                    var len=content.length;
+                                                                    var wordNum=$("#DescWordCheck").html();
+                                                                    if(40-len<0){
+                                                                        $("#allWords").html("字数超出限制");
+                                                                        $("#allWords").css("color","red");
+                                                                    }else{
+                                                                        $("#allWords").html("还可以输入"+(40-len)+"个汉字");
+                                                                        $("#allWords").css("color","green");
+
+                                                                    }
+
+                                                                });
+
+                                                            });
+                                                        </script>
+
+
+                                                        <label >上传相册封面</label>
+                                                        <label class="sr-only" for="inputfile">上传相册封面</label>
+                                                        <input type="file" name="classAlbumImage" id="inputfile">
+                                                        <script>
+                                                            window.onload = function() {
+                                                                var input = document.getElementById("inputfile");
+                                                                var div;
+                                                                // 当用户上传时触发事件
+                                                                input.onchange = function() {
+                                                                    readFile(this);
+                                                                }
+                                                                //处理图片并添加都dom中的函数
+                                                                var readFile = function(obj) {
+                                                                    // 获取input里面的文件组
+                                                                    var fileList = obj.files;
+                                                                    //对文件组进行遍历，可以到控制台打印出fileList去看看
+
+                                                                    for(var i = 0; i < fileList.length; i++) {
+                                                                        if(fileList[i].type=="image/jpeg"
+                                                                        ||fileList[i].type=="image/png"
+                                                                        ||fileList[i].type=="image/jpg"){
+
+                                                                        }else{
+                                                                            $("#inputfile").val("");
+                                                                            alert("仅允许上传jpg,jpeg,png格式的图片");
+                                                                            return false;
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        </script>
+                                                    </form>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                    <button type="button" id="saveAlbum" class="btn btn-primary">保存</button>
+
+                                                </div>
+                                            </div>
+                                            <script>
+                                                <!--新增相册之前对相册名长度和相册描述长度进行判断-->
+                                                $("#parentItem").html("班级风采");
+						                        $("#childItem").html("班级相册");
+						                        $(function(){
+                                                    $("#saveAlbum").click(function(){
+                                                        var name=$("#photoAlbumName").val();
+                                                        var desc=$("#photoAlbumDesc").val();
+
+                                                        if(desc.length>40||name.length==0||name.length>5){
+
+                                                            if(name.length==0){
+                                                                alert("您还没有输入相册名。");
+                                                            }
+                                                            if(name.length>5){
+                                                                alert("相册名字数超出限制。");
+                                                            }
+                                                            return;
+                                                        }else{
+                                                             var form = document.getElementById("albumForm");
+                                                             form.action = "/albumAdd";
+                                                             form.method = "post";
+                                                             form.enctype="multipart/form-data";
+                                                             form.submit();
+                                                        }
+
+                                                    });
+                                                });
+
+                                            </script>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${result=='activity'}">
+                        <div class="row clearfix">
+                            <div class="col-md-12 column" style="width: 835px;">
+                                <div class="media" style="border: 1px solid lightgrey;padding: 10px;" th:each="e:${classActivity}">
+                                    <a href="#" class="pull-left"><img style="width: 120px;height: 120px;" th:src="${e.classActivityImag}" class="media-object" alt='' /></a>
+                                    <div class="media-body">
+                                        <h3 class="media-heading" th:text="${e.classActivityName}">
+                                        </h3>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <a class="layui-btn layui-btn-primary" style="text-decoration:none">详情</a>
+                                        <a class="layui-btn layui-btn-primary" style="text-decoration:none">修改</a>
+                                        <a class="layui-btn layui-btn-primary" style="text-decoration:none">删除</a>
+                                    </div>
+                                </div>
+
+                                <br />
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion"
+                                               href="#collapseOne">
+                                                发布活动
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <form class="form-horizontal" id="activityForm" role="form" >
+                                                <div class="form-group">
+                                                    <label for="activityName" class="col-sm-2 control-label">活动标题</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text"  class="form-control" name="activityName" id="activityName" placeholder="请输入标题">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="activityDesc" class="col-sm-2 control-label">活动内容</label>
+                                                    <div class="col-sm-10">
+                                                        <textarea  class="form-control" name="activityDesc" id="activityDesc" placeholder="请输入内容"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="activityTime" class="col-sm-2 control-label">活动时间</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control" name="activityTime" id="activityTime" >
+                                                    </div>
+                                                    <script>
+                                                        layui.use('laydate', function() {
+                                                            var laydate = layui.laydate;
+
+                                                            //日期时间选择器
+                                                            laydate.render({
+                                                              elem: '#activityTime'
+                                                              ,type: 'datetime'
+                                                              ,format: 'yyyy年MM月dd日 HH点mm分'
+                                                            });
+                                                                        });
+                                                    </script>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="activityAddr" class="col-sm-2 control-label">活动地点</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" name="activityAddr" id="activityAddr" placeholder="请输入活动地点">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="activityPublisher" class="col-sm-2 control-label">活动举办方</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" name="activityPublisher" id="activityPublisher" placeholder="请输入活动举办方">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="activityImag" class="col-sm-2 control-label">上传活动封面</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="file" class="form-control" name="activityImag" id="activityImag" placeholder="上传封面">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-sm-offset-2 col-sm-10">
+                                                        <button type="button" class="btn btn-default"  id="publish" data-container="body" data-toggle="popover"  >发布</button>
+                                                    </div>
+                                                    <script>
+                                                        layui.use('layer', function(){
+
+                                                        });
+                                                        $(function al() {
+                                                            $("#publish").on("click", function() {
+
+                                                                var activityName = document.getElementById("activityName").value;
+                                                                var activityDesc = document.getElementById("activityDesc").value;
+                                                                var activityTime = document.getElementById("activityTime").value;
+                                                                var activityPublisher = document.getElementById("activityPublisher").value;
+                                                                var activityAddr = document.getElementById("activityAddr").value;
+                                                                var activityImag = document.getElementById("activityImag").value;
+                                                                if(activityName == '' ||activityTime==''||activityPublisher==''||activityAddr==''||activityImag=='') {
+                                                                   if(activityName==''){
+                                                                     alert("请输入活动名称");
+                                                                   }else{
+                                                                        if(activityTime==''){
+                                                                        alert("请输入活动时间");
+                                                                        }else{
+                                                                             if(activityAddr==''){
+                                                                                 alert("请输入活动地址");
+                                                                             }else{
+                                                                                if(activityPublisher==''){
+                                                                                     alert("请输入活动举办方");
+                                                                                 }else{
+                                                                                    if(activityImag==''){
+                                                                                         alert("请上传活动图片");
+                                                                                     }
+                                                                                 }
+                                                                             }
+                                                                        }
+                                                                   }
+                                                                 return false;
+                                                                } else {
+                                                                    var form = document.getElementById("activityForm");
+                                                                     form.action = "/classActivityAdd";
+                                                                     form.method = "post";
+                                                                     form.enctype="multipart/form-data";
+                                                                     form.submit();
+                                                                }
+                                                            });
+
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div style="display:none;" th:id="error" th:name="${msg}" th:text="${msg}"></div>
+                                        <script>
+                                            $("#parentItem").html("班级风采");
+						                    $("#childItem").html("班级活动");
+                                            if($("#error").html() == 'ok') {
+                                                alert("发布成功！");
+                                            }
+                                            if($("#error").html() == 'error') {
+                                                alert("发布失败，请重新输入！");
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+
+					$("#member").on("click",function(){//班级成员
+						$("#class_right_page").load("class_member.html");
+						$("#parentItem").html("班级风采");
+						$("#childItem").html("班级成员");
+					})
+					$("#document").on("click",function(){
+						$("#class_right_page").load("class_document.html");
+						$("#parentItem").html("班级管理");
+						$("#childItem").html("重要文档管理");
+					})
+					$("#activity").on("click",function(){
+
+						location.replace("/enterClassActivity");
+					})
+					$("#notice").on("click",function(){
+						location.replace("/classView");
+					})
+					$("#album").on("click",function(){
+
+						location.replace("/enterClassAlbum");
+
+					})
+					$("#fee").on("click",function(){
+						$("#class_right_page").load("class_fee.html");
+						$("#parentItem").html("班级管理");
+						$("#childItem").html("班费收支明细");
+					})
+					$("#homework").on("click",function(){
+						$("#class_right_page").load("class_homework.html");
+						$("#parentItem").html("班级管理");
+						$("#childItem").html("作业提交");
+					})
+
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

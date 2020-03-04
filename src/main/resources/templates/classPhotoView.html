@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>相册图片</title>
+		<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="css/loginButton.css" />
+	</head>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0
+		}
+		
+		body {
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 14px;
+			color: #747d67;
+			background: #fff
+		}
+		
+		.clear {
+			clear: both
+		}
+		
+		.min-header {
+			position: fixed;
+			left: 0;
+			top: 0;
+			right: 0;
+			z-index: 10;
+			height: 90px;
+			background: #fff;
+			border-bottom: 1px solid #ddd;
+			transform: translateZ(0);
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
+			animation: solltTop 0.6s;
+			min-width: 1200px;
+		}
+		
+		.container {
+			padding-top: 60px;
+		}
+	</style>
+
+	<body>
+		<div class="min-header">
+			<div class="row clearfix">
+				<div class="col-md-2 column">
+					<img alt="80x80" th:src="@{/resources/img/mainIcon01.png}" style="width:80px;height: 80px;" />
+				</div>
+				<div class="col-md-8 column" style="margin-top: 30px;">
+					<div class="list-group">
+						<a href="#" class="list-group-item " th:text="${className}"></a>
+					</div>
+				</div>
+				<div class="col-md-1 column" style="margin-top: 30px;">
+					<button type="button" class="btn btn-default" style="background-color: #FF5656;color: white;">退出</button>
+				</div>
+				<div class="col-md-1 column">
+					<img alt="100x100" th:src="@{/resources/img/class_01.png}" style="height: 50px;width: 50px;margin-left: 20px;border-radius: 25px;margin-top: 25px;" />
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row clearfix" style="height: 50px;">
+			</div>
+				<h3 th:text="${classAlbum.classAlbumName}" style="display:inline"></h3>
+				<h5 th:text="${classAlbum.classAlbumDesc}" style="display:inline"></h5>
+			<!-- 按钮触发模态框 -->
+			<button class="btn btn-default " id="uploadPhoto" style="float: right;" data-toggle="modal" data-target="#myModal">批量上传图片</button>
+			<!-- 模态框（Modal） -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="myModalLabel">批量上传</h4>
+						</div>
+						<div class="modal-body">
+							<form id="formAccessory" enctype="multipart/form-data" method="post" th:action="@{/classPhotoAdd}">
+								<input type="file" id="accessory" name="files" multiple value="" />
+								<input type="hidden" name="classAlbumId" th:value="${classAlbum.classAlbumId}"/>
+							</form><br />
+							<div id="img-box">
+
+							</div>
+						</div>
+						<div class="modal-footer" >
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							<button type="button" id="photoSubmit" class="btn btn-primary">确认上传</button>
+							<script>
+								$("#photoSubmit").on("click",function(){
+									if($("#img-box").html()==""){
+										alert("您还没有选择图片");
+										return false;
+									}else{
+									var form=$("#formAccessory");
+									form.submit();
+									}
+
+								});
+							</script>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal -->
+			</div>
+			<script>
+				$("#uploadPhoto").on("click",function(){
+					$("#img-box").html("");
+					$("#accessory").val("");
+				})
+				window.onload = function() {
+					var input = document.getElementById("accessory");
+					var div;
+					// 当用户上传时触发事件
+					input.onchange = function() {
+						readFile(this);
+					}
+					//处理图片并添加都dom中的函数
+					var readFile = function(obj) {
+						// 获取input里面的文件组
+						var fileList = obj.files;
+						//对文件组进行遍历，可以到控制台打印出fileList去看看
+						document.getElementById("img-box").innerHTML="";
+						for(var i = 0; i < fileList.length; i++) {
+							if(fileList[i].type=="image/jpeg"
+							||fileList[i].type=="image/png"
+							||fileList[i].type=="image/jpg"){
+
+							}else{
+								$("#accessory").val("");
+								alert("仅允许上传jpg,jpeg,png格式的图片");
+								return false;
+							}
+						}
+						for(var i = 0; i < fileList.length; i++) {
+							var reader = new FileReader();
+							reader.readAsDataURL(fileList[i]);
+							// 当文件读取成功时执行的函数
+							reader.onload = function(e) {
+								div = document.createElement('div');
+								div.innerHTML = '<div style="width:400px;height:200px;padding-bottom:10px;"><img src="' + this.result + '" style="width:400px;height:200px;padding:10px" /></div>';
+								document.getElementById("img-box").appendChild(div);
+							}
+						}
+					}
+				}
+			</script>
+
+
+			<div class="row clearfix" style="height: 20px;">
+
+			</div>
+			<div class="row clearfix">
+				<div th:each="phoMap:${photoMap}">
+					<div th:each="pMap:${phoMap.value}">
+						<div class="well well-sm">
+							<a style="font-weight: 400;text-decoration: none;" th:text="${phoMap.key}"></a>
+							于<a style="font-weight: 400;text-decoration: none;" th:text="${pMap.key}"></a>上传了
+							<a style="font-weight: 400;text-decoration: none;" th:text="${pMap.value.size()}"></a>张照片</div>
+						<div class="row" >
+							<div class="col-sm-6 col-md-3" th:each="classPhoto:${pMap.value}">
+								<a href="#" class="thumbnail">
+									<img th:src="${classPhoto.classPhotoContent}" alt="通用的占位符缩略图">
+								</a>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</body>
+
+</html>

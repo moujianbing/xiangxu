@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="css/loginButton.css" />
+	</head>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0
+		}
+		
+		body {
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 14px;
+			color: #747d67;
+			background: #fff
+		}
+		
+		.clear {
+			clear: both
+		}
+		
+		.min-header {
+			position: fixed;
+			left: 0;
+			top: 0;
+			right: 0;
+			z-index: 10;
+			height: 90px;
+			background: #fff;
+			border-bottom: 1px solid #ddd;
+			transform: translateZ(0);
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
+			animation: solltTop 0.6s;
+			min-width: 1200px;
+		}
+		
+		.container {
+			padding-top: 60px;
+		}
+	</style>
+
+	<body>
+	<div class="min-header">
+		<div class="row clearfix">
+			<div class="col-md-2 column">
+				<img alt="80x80" th:src="@{/resources/img/mainIcon01.png}" style="width:80px;height: 80px;" />
+			</div>
+			<div class="col-md-8 column" style="margin-top: 30px;">
+				<div class="list-group">
+					<a href="#" class="list-group-item " th:text="${className}"></a>
+				</div>
+			</div>
+			<div class="col-md-1 column" style="margin-top: 30px;">
+				<button type="button" class="btn btn-default" style="background-color: #FF5656;color: white;">退出</button>
+			</div>
+			<div class="col-md-1 column">
+				<img alt="100x100" th:src="@{/resources/img/class_01.png}" style="height: 50px;width: 50px;margin-left: 20px;border-radius: 25px;margin-top: 25px;" />
+			</div>
+		</div>
+	</div>
+		<div class="container">
+			<div class="row clearfix" style="height: 50px;">
+			</div>
+			<div class="col-md-6 col-md-push-3">
+				<h4 style="font: bold;">修改相册</h4>
+				<form role="form" id="albumForm" >
+					<div class="form-group">
+						<label for="classAlbumName">相册名称</label>
+						<input type="hidden" name="classAlbumId" id="classAlbumId" th:value="${classAlbum.classAlbumId}">
+						<input type="text" class="form-control" name="classAlbumName" id="classAlbumName" th:value="${classAlbum.classAlbumName}" placeholder="请输入相册名">
+						<span style="font-family: '微软雅黑';color:red"  id="NameWordCheck">不能超过5个字</span><br>
+					</div>
+					<div class="form-group">
+						<label for="classAlbumDesc">相册描述</label>
+						<input type="text" class="form-control" name="classAlbumDesc" id="classAlbumDesc" th:value="${classAlbum.classAlbumDesc}" placeholder="请输入相册描述">
+						<span id="allWords" style="color:green">还可以输入<span style="font-family: '微软雅黑';" id="DescWordCheck">40</span>个汉字</span>
+						<br>
+					</div>
+					<script>
+						$(function() {
+							$("#classAlbumDesc").keyup(function(){
+								var content=$("#classAlbumDesc").val();
+								var len=content.length;
+								var wordNum=$("#DescWordCheck").html();
+								if(40-len<0){
+									$("#allWords").html("字数超出限制");
+									$("#allWords").css("color","red");
+								}else{
+									$("#allWords").html("还可以输入"+(40-len)+"个汉字");
+									$("#allWords").css("color","green");
+
+								}
+
+							});
+							$("#saveAlbum").click(function(){
+								var name=$("#classAlbumName").val();
+								var desc=$("#classAlbumDesc").val();
+
+								if(desc.length>40||name.length==0||name.length>5){
+
+									if(name.length==0){
+										alert("您还没有输入相册名。");
+									}
+									if(name.length>5){
+										alert("相册名字数超出限制。");
+									}
+									if(desc.length>40){
+										alert("相册描述字数超出限制。");
+									}
+									return;
+								}else{
+									 var form = document.getElementById("albumForm");
+									 form.action = "/albumModify";
+									 form.method = "post";
+									 form.enctype="multipart/form-data";
+									 form.submit();
+								}
+
+							});
+
+						});
+					</script>
+					<div class="form-group">
+						<label for="inputfile">更换相册封面</label>
+						<input type="file" name="inputFile" id="inputfile">
+						<p class="help-block"></p>
+					</div>
+					<button type="submit" id="saveAlbum" class="btn btn-default">提交</button>
+					<script>
+						window.onload = function() {
+							var input = document.getElementById("inputfile");
+							var div;
+							// 当用户上传时触发事件
+							input.onchange = function() {
+								readFile(this);
+							}
+							//处理图片并添加都dom中的函数
+							var readFile = function(obj) {
+								// 获取input里面的文件组
+								var fileList = obj.files;
+								//对文件组进行遍历，可以到控制台打印出fileList去看看
+
+								for(var i = 0; i < fileList.length; i++) {
+									if(fileList[i].type=="image/jpeg"
+									||fileList[i].type=="image/png"
+									||fileList[i].type=="image/jpg"){
+
+									}else{
+										$("#inputfile").val("");
+										alert("仅允许上传jpg,jpeg,png格式的图片");
+										return false;
+									}
+								}
+
+							}
+						}
+					</script>
+				</form>
+			</div>
+			
+		</div>
+		</div>
+	</body>
+
+</html>
