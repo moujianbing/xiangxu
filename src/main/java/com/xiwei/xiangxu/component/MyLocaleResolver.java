@@ -32,8 +32,4 @@ public class MyLocaleResolver implements LocaleResolver {
     public void setLocale(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Locale locale) {
 
     }
-
-    public static void main(String[] args) {
-        System.out.println("git上传成功");
-    }
 }
